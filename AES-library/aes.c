@@ -73,60 +73,55 @@ int GFMultiplication(int a, int b)
 
 int extendedEuclidAlg(int a, int b)
 {
-    int r1 = a;
-    int r2 = b;
+  int r1 = a;
+  int r2 = b;
+
+  int q = divisionAlgorithmQuotient(r1, r2);
+  int r = divisionAlgorithmRest(r1, r2);
     
-    int q = divisionAlgorithmQuotient(r1, r2);
-    int r = divisionAlgorithmRest(r1, r2);
+  int s1 = 1;
+  int s2 = 0;
+  int s = s1 ^ GFMultiplication(s2, q);
     
-    int s1 = 1;
-    int s2 = 0;
-    int s = s1 ^ GFMultiplication(s2, q);
+  int t1 = 0;
+  int t2 = 1;
+  int t = t1 ^ GFMultiplication(t2, q);
     
-    int t1 = 0;
-    int t2 = 1;
-    int t = t1 ^ GFMultiplication(t2, q);
-    
-    while (r != 0)
-    {
-      r1 = r2;
-      r2 = r;
+  while (r != 0)
+  {
+    r1 = r2;
+    r2 = r;
       
-      q = divisionAlgorithmQuotient(r1, r2);
-      r = divisionAlgorithmRest(r1, r2);
+    q = divisionAlgorithmQuotient(r1, r2);
+    r = divisionAlgorithmRest(r1, r2);
       
-      s1 = s2;
-      s2 = s;
-      
-      t1 = t2;
-      t2 = t;
-      
-      s = s1 ^ polynomialMultiplication(s2, q);
-      t = t1 ^ polynomialMultiplication(t2, q);
-        
-    }
-    
     s1 = s2;
     s2 = s;
-        
+      
     t1 = t2;
     t2 = t;
+      
+    s = s1 ^ polynomialMultiplication(s2, q);
+    t = t1 ^ polynomialMultiplication(t2, q);    
+  }
     
-    r1 = r2;
+  s1 = s2;
+  s2 = s;
+        
+  t1 = t2;
+  t2 = t;
     
-    return s1;
+  r1 = r2;
     
-    
+  return s1;
 }
 
 int main()
 {
-    for (int i = 1; i < 284; i++)
-    {
-        int inverse = extendedEuclidAlg(i, 283);
-        printf("%d * %d = %d\n", i, inverse, GFMultiplication(i, inverse));
-    }
-    
-    
+  for (int i = 1; i < 284; i++)
+  {
+    int inverse = extendedEuclidAlg(i, 283);
+    printf("%d * %d = %d\n", i, inverse, GFMultiplication(i, inverse));
+  }
 	return 0;
 }
