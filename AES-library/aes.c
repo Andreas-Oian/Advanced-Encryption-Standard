@@ -2,7 +2,7 @@
 
 int input[16] = {0x32, 0x43, 0xf6, 0xa8, 0x88, 0x5a, 0x30, 0x8d, 0x31, 0x31, 0x98, 0xa2, 0xe0, 0x37, 0x07, 0x34};
 
-char state[4][4];
+int state[4][4];
 
 void inputToState(int input[16])
 {
@@ -144,38 +144,50 @@ int subByte(int b)
 	    b = extendedEuclidAlg(b, 283);
 	}
 	
-    char c0 = 1;
-    char c1 = 1;
-    char c2 = 0;
-    char c3 = 0;
-    char c4 = 0;
-    char c5 = 1;
-    char c6 = 1;
-    char c7 = 0;
+    int c0 = 1;
+    int c1 = 1;
+    int c2 = 0;
+    int c3 = 0;
+    int c4 = 0;
+    int c5 = 1;
+    int c6 = 1;
+    int c7 = 0;
     
-    char b0 = bitN(b, 0);
-    char b1 = bitN(b, 1);
-    char b2 = bitN(b, 2);
-    char b3 = bitN(b, 3);
-    char b4 = bitN(b, 4);
-    char b5 = bitN(b, 5);
-    char b6 = bitN(b, 6);
-    char b7 = bitN(b, 7);
+    int b0 = bitN(b, 0);
+    int b1 = bitN(b, 1);
+    int b2 = bitN(b, 2);
+    int b3 = bitN(b, 3);
+    int b4 = bitN(b, 4);
+    int b5 = bitN(b, 5);
+    int b6 = bitN(b, 6);
+    int b7 = bitN(b, 7);
     
-    char b0p = (b0 ^ b4 ^ b5 ^ b6 ^ b7 ^ c0) << 0;
-    char b1p = (b1 ^ b5 ^ b6 ^ b7 ^ b0 ^ c1) << 1;
-    char b2p = (b2 ^ b6 ^ b7 ^ b0 ^ b1 ^ c2) << 2;
-    char b3p = (b3 ^ b7 ^ b0 ^ b1 ^ b2 ^ c3) << 3;
-    char b4p = (b4 ^ b0 ^ b1 ^ b2 ^ b3 ^ c4) << 4;
-    char b5p = (b5 ^ b1 ^ b2 ^ b3 ^ b4 ^ c5) << 5;
-    char b6p = (b6 ^ b2 ^ b3 ^ b4 ^ b5 ^ c6) << 6;
-    char b7p = (b7 ^ b3 ^ b4 ^ b5 ^ b6 ^ c7) << 7;
+    int b0p = (b0 ^ b4 ^ b5 ^ b6 ^ b7 ^ c0) << 0;
+    int b1p = (b1 ^ b5 ^ b6 ^ b7 ^ b0 ^ c1) << 1;
+    int b2p = (b2 ^ b6 ^ b7 ^ b0 ^ b1 ^ c2) << 2;
+    int b3p = (b3 ^ b7 ^ b0 ^ b1 ^ b2 ^ c3) << 3;
+    int b4p = (b4 ^ b0 ^ b1 ^ b2 ^ b3 ^ c4) << 4;
+    int b5p = (b5 ^ b1 ^ b2 ^ b3 ^ b4 ^ c5) << 5;
+    int b6p = (b6 ^ b2 ^ b3 ^ b4 ^ b5 ^ c6) << 6;
+    int b7p = (b7 ^ b3 ^ b4 ^ b5 ^ b6 ^ c7) << 7;
     
-    char bp = b0p ^ b1p ^ b2p ^ b3p ^ b4p ^ b5p ^ b6p ^ b7p;
+    int bp = b0p ^ b1p ^ b2p ^ b3p ^ b4p ^ b5p ^ b6p ^ b7p;
     return bp;
 }
 
-int main()
+void subBytes(int state[4][4])
 {
-    printf("%d", subByte(0x00));
+    for (int c = 0; c < 4; c++)
+    {
+    for (int r = 0; r < 4; r++)
+    {
+        state[r][c] = subByte(state[r][c]);
+    }
+    }
+}
+
+
+int main() {
+	inputToState(input);
+	subBytes(state);
 }
