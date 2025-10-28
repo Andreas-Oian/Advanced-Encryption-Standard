@@ -1,5 +1,20 @@
 #include <stdio.h>
 
+int input[16] = {0x32, 0x43, 0xf6, 0xa8, 0x88, 0x5a, 0x30, 0x8d, 0x31, 0x31, 0x98, 0xa2, 0xe0, 0x37, 0x07, 0x34};
+
+char state[4][4];
+
+void inputToState(int input[16])
+{
+    for (int c = 0; c < 4; c++)
+    {
+    for (int r = 0; r < 4; r++)
+    {
+        state[r][c] = input[r+4*c];
+    }
+    }
+}
+
 unsigned int binaryLength(int n)
 {
   unsigned int count = 0;
