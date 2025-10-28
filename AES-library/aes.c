@@ -116,6 +116,50 @@ int extendedEuclidAlg(int a, int b)
   return s1;
 }
 
+char bitN(char b, char n)
+{
+    char bit_status = (b >> n) & 1; 
+    return bit_status;
+}
+
+char subByte(char b)
+{
+	if (b != 0)
+	{
+		b = extendedEuclidAlg(b, 283);
+	}
+	
+    char c0 = 1;
+    char c1 = 1;
+    char c2 = 0;
+    char c3 = 0;
+    char c4 = 0;
+    char c5 = 1;
+    char c6 = 1;
+    char c7 = 0;
+    
+    char b0 = bitN(b, 0);
+    char b1 = bitN(b, 1);
+    char b2 = bitN(b, 2);
+    char b3 = bitN(b, 3);
+    char b4 = bitN(b, 4);
+    char b5 = bitN(b, 5);
+    char b6 = bitN(b, 6);
+    char b7 = bitN(b, 7);
+    
+    char b0p = (b0 ^ b4 ^ b5 ^ b6 ^ b7 ^ c0) << 0;
+    char b1p = (b1 ^ b5 ^ b6 ^ b7 ^ b0 ^ c1) << 1;
+    char b2p = (b2 ^ b6 ^ b7 ^ b0 ^ b1 ^ c2) << 2;
+    char b3p = (b3 ^ b7 ^ b0 ^ b1 ^ b2 ^ c3) << 3;
+    char b4p = (b4 ^ b0 ^ b1 ^ b2 ^ b3 ^ c4) << 4;
+    char b5p = (b5 ^ b1 ^ b2 ^ b3 ^ b4 ^ c5) << 5;
+    char b6p = (b6 ^ b2 ^ b3 ^ b4 ^ b5 ^ c6) << 6;
+    char b7p = (b7 ^ b3 ^ b4 ^ b5 ^ b6 ^ c7) << 7;
+    
+    char bp = b0p ^ b1p ^ b2p ^ b3p ^ b4p ^ b5p ^ b6p ^ b7p;
+    return bp;
+}
+
 int main()
 {
   for (int i = 1; i < 284; i++)
