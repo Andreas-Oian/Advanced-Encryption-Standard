@@ -186,8 +186,21 @@ void subBytes(int state[4][4])
     }
 }
 
+void shiftRows(int state[4][4])
+{
+	for (int r = 0; r < 4; r++)
+	{
+		int row[4] = { state[r][0], state[r][1], state[r][2], state[r][3]};
+		for (int c = 0; c < 4; c++)
+		{
+			state[r][c] = row[(c + r)%4];
+		}
+	}
+}
+
 
 int main() {
 	inputToState(input);
 	subBytes(state);
+	shiftRows(state);
 }
