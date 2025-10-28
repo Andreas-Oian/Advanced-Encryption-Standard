@@ -122,11 +122,11 @@ char bitN(char b, char n)
     return bit_status;
 }
 
-char subByte(char b)
+int subByte(int b)
 {
 	if (b != 0)
 	{
-		b = extendedEuclidAlg(b, 283);
+	    b = extendedEuclidAlg(b, 283);
 	}
 	
     char c0 = 1;
@@ -162,10 +162,5 @@ char subByte(char b)
 
 int main()
 {
-  for (int i = 1; i < 284; i++)
-  {
-    int inverse = extendedEuclidAlg(i, 283);
-    printf("%d * %d = %d\n", i, inverse, GFMultiplication(i, inverse));
-  }
-	return 0;
+    printf("%d", subByte(0x00));
 }
