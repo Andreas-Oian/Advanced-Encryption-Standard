@@ -1,3 +1,5 @@
+int state[4][4];
+
 void inputToState(int input[16])
 {
     for (int c = 0; c < 4; c++)
@@ -204,7 +206,7 @@ void mixColumns(int state[4][4])
 		int s0p = GFMultiplication(0x02, s0) ^ GFMultiplication(0x03, s1) ^ s2 ^ s3;
 		
 		int s1p = s0 ^ GFMultiplication(0x02, s1) ^ GFMultiplication(0x03, s2) ^ s3;
-				
+				https://www.onlinegdb.com/online_c_compiler#_editor_1040591611
 		int s2p = s0 ^ s1 ^ GFMultiplication(0x02, s2) ^ GFMultiplication(0x03, s3);
 				
 		int s3p = GFMultiplication(0x03, s0) ^ s1 ^ s2 ^ GFMultiplication(0x02, s3);
@@ -214,4 +216,53 @@ void mixColumns(int state[4][4])
 		state[2][c] = s2p;
 		state[3][c] = s3p;
 	}
+}
+
+void assignWord(unsigned char temp[4], unsigned char word[4])
+{
+    for (int j = 0; j < 4; j++)
+    {
+        temp[j] = word[j];
+    }
+}
+
+void rotWord(unsigned char temp[4])
+{
+    unsigned char t0 = temp[0];
+    unsigned char t1 = temp[1];
+    unsigned char t2 = temp[2];
+    unsigned char t3 = temp[3];
+    
+    temp[0] = t1;
+    temp[1] = t2;
+    temp[2] = t3;
+    temp[3] = t0;
+}
+
+void subWord(unsigned char temp[4])
+{
+    for (int j = 0; j < 4; j++)
+    {
+        unsigned char t = temp[j];
+        unsigned char s = subByte(t);
+        temp[j] = s;
+    }
+}
+
+int rcon(int i)
+{
+    return 1<<(i-1);
+}
+
+void xorRcon(unsigned char temp[4], int rcon)
+{
+    temp[0] = temp[0] ^ rcon;
+}
+
+void xorWord(unsigned char temp[4], unsigned char word[4])
+{
+    for (int j = 0; j < 4; j++)
+    {
+        temp[j] = temp[j] ^ word[j];
+    }
 }
