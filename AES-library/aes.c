@@ -198,11 +198,36 @@ void shiftRows(int state[4][4])
 	}
 }
 
+void mixColumns(int state[4][4])
+{
+	for (int c = 0; c < 4; c++)
+	{
+		int s0 = state[0][c];
+		int s1 = state[1][c];
+		int s2 = state[2][c];
+		int s3 = state[3][c];
+		
+		int s0p = GFMultiplication(0x02, s0) ^ GFMultiplication(0x03, s1) ^ s2 ^ s3;
+		
+		int s1p = s0 ^ GFMultiplication(0x02, s1) ^ GFMultiplication(0x03, s2) ^ s3;
+				
+		int s2p = s0 ^ s1 ^ GFMultiplication(0x02, s2) ^ GFMultiplication(0x03, s3);
+				
+		int s3p = GFMultiplication(0x03, s0) ^ s1 ^ s2 ^ GFMultiplication(0x02, s3);
+				
+		state[0][c] = s0p;
+		state[1][c] = s1p;
+		state[2][c] = s2p;
+		state[3][c] = s3p;
+	}
+}
+
 
 int main() {
 	inputToState(input);
 	subBytes(state);
 	shiftRows(state);
+	mixColumns(state);
 	for (int r = 0; r < 4; r++)
 	{
 		printf("%4x %4x %4x %4x\n", state[r][0], state[r][1], state[r][2], state[r][3]);
