@@ -2,6 +2,7 @@ typedef unsigned char byte;
 typedef unsigned int poly;
 
 byte state[4][4];
+byte w[44][4];
 
 void inputToState(byte input[16])
 {
@@ -306,5 +307,38 @@ void addRoundKey(byte state[4][4], byte word[44][4], int round)
 	}
 	}
 }
+
+void cipher(byte input[16], byte state[4][4], byte word[44][4]){
+	inputToState(input);
+
+	addRoundKey(state, w, 0);
 	
+	for (int round = 1; round < 10; round++){
+		subBytes(state);
+		shiftRows(state);
+		mixColumns(state);
+		addRoundKey(state, w, round);
+	}
+	subBytes(state);
+	shiftRows(state);
+	addRoundKey(state, w, 10);
+
+}
+
+void printState(byte state[4][4]){
+	for (int r = 0; r < 4; r++)
+	{
+		printf("%4x%4x%4x%4x\n", state[r][0], state[r][1], state[r][2], state[r][3]);
+	}
+}
+
+void stateToString(byte state[4][4], char output[16]){
+    for (int c = 0; c < 4; c++)
+    {
+    for (int r = 0; r < 4; r++)
+    {
+        output[r+4*c] = state[r][c];
+    }
+    }
+}
 
