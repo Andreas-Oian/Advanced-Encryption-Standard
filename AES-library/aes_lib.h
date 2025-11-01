@@ -249,9 +249,9 @@ void subWord(unsigned char temp[4])
     }
 }
 
-int rcon(int i)
+unsigned char rcon(int i)
 {
-    return 1<<(i-1);
+    return divisionAlgorithmRest(1<<(i-1), 283);
 }
 
 void xorRcon(unsigned char temp[4], int rcon)
@@ -266,3 +266,42 @@ void xorWord(unsigned char temp[4], unsigned char word[4])
         temp[j] = temp[j] ^ word[j];
     }
 }
+
+void keyExpansion(unsigned char key[16], unsigned char w[44][4])
+{
+    unsigned char temp[4];
+
+    for (int i = 0; i < 4; i++)
+    {
+    for (int j = 0; j < 4; j++)
+    {
+        w[i][j] = key[4*i+j];
+    }
+    }
+    
+    
+    for (int i = 4; i < 44; i++)
+    {
+        assignWord(temp, w[i-1]);
+        if (i%4 == 0) {
+            rotWord(temp);
+            subWord(temp);
+            xorRcon(temp, rcon(i/4));
+        }
+        xorWord(temp, w[i-4]);
+        assignWord(w[i], temp);
+    }
+}
+
+void addRoundKey(int state[4][4], unsigned char word[44][4], int round)
+{
+	for (int r = 0; r < 4; r++)
+	{
+	for (int c = 0; c < 4; c++)
+	{
+	state[r][c] = state[r][c] ^ word[c+4*round][r];
+	}
+	}
+}
+	
+
