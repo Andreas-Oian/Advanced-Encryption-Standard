@@ -1,6 +1,9 @@
-int state[4][4];
+typedef unsigned char byte;
+typedef unsigned int poly;
 
-void inputToState(int input[16])
+byte state[4][4];
+
+void inputToState(byte input[16])
 {
     for (int c = 0; c < 4; c++)
     {
@@ -22,14 +25,14 @@ unsigned int binaryLength(int n)
   return count;
 }
 
-unsigned int polynomialAdd(int a, int b)
+poly polynomialAdd(poly a, poly b)
 {
 	return a ^ b;
 }
 
-unsigned int polynomialMultiplication(int a, int b)
+poly polynomialMultiplication(poly a, poly b)
 {
-	unsigned int product = 0;
+	poly product = 0;
 	
 	while (a)
 	{
@@ -41,13 +44,13 @@ unsigned int polynomialMultiplication(int a, int b)
 	return product;
 }
 
-int divisionAlgorithmRest(int a, int b)
+poly divisionAlgorithmRest(poly a, poly b)
 {
-	int dividend = a;
-	int divisor = b;
+	poly dividend = a;
+	poly divisor = b;
 
-	int quotient = 0;
-	int rest = dividend;
+	poly quotient = 0;
+	poly rest = dividend;
 
 	while (binaryLength(rest) >= binaryLength(divisor))
 	{
@@ -59,13 +62,13 @@ int divisionAlgorithmRest(int a, int b)
 	return rest;
 }
 
-int divisionAlgorithmQuotient(int a, int b)
+poly divisionAlgorithmQuotient(poly a, poly b)
 {
-	int dividend = a;
-	int divisor = b;
+	poly dividend = a;
+	poly divisor = b;
 
-	int quotient = 0;
-	int rest = dividend;
+	poly quotient = 0;
+	poly rest = dividend;
 
 	while (binaryLength(rest) >= binaryLength(divisor))
 	{
@@ -77,7 +80,7 @@ int divisionAlgorithmQuotient(int a, int b)
 	return quotient;
 }
 
-int GFMultiplication(int a, int b)
+poly GFMultiplication(poly a, poly b)
 {
   return divisionAlgorithmRest(polynomialMultiplication(a, b), 283);
 }
@@ -140,38 +143,38 @@ int subByte(int b)
 	    b = extendedEuclidAlg(b, 283);
 	}
 	
-    int c0 = 1;
-    int c1 = 1;
-    int c2 = 0;
-    int c3 = 0;
-    int c4 = 0;
-    int c5 = 1;
-    int c6 = 1;
-    int c7 = 0;
+    byte c0 = 1;
+    byte c1 = 1;
+    byte c2 = 0;
+    byte c3 = 0;
+    byte c4 = 0;
+    byte c5 = 1;
+    byte c6 = 1;
+    byte c7 = 0;
+
+    byte b0 = bitN(b, 0);
+    byte b1 = bitN(b, 1);
+    byte b2 = bitN(b, 2);
+    byte b3 = bitN(b, 3);
+    byte b4 = bitN(b, 4);
+    byte b5 = bitN(b, 5);
+    byte b6 = bitN(b, 6);
+    byte b7 = bitN(b, 7);
+
+    byte b0p = (b0 ^ b4 ^ b5 ^ b6 ^ b7 ^ c0) << 0;
+    byte b1p = (b1 ^ b5 ^ b6 ^ b7 ^ b0 ^ c1) << 1;
+    byte b2p = (b2 ^ b6 ^ b7 ^ b0 ^ b1 ^ c2) << 2;
+    byte b3p = (b3 ^ b7 ^ b0 ^ b1 ^ b2 ^ c3) << 3;
+    byte b4p = (b4 ^ b0 ^ b1 ^ b2 ^ b3 ^ c4) << 4;
+    byte b5p = (b5 ^ b1 ^ b2 ^ b3 ^ b4 ^ c5) << 5;
+    byte b6p = (b6 ^ b2 ^ b3 ^ b4 ^ b5 ^ c6) << 6;
+    byte b7p = (b7 ^ b3 ^ b4 ^ b5 ^ b6 ^ c7) << 7;
     
-    int b0 = bitN(b, 0);
-    int b1 = bitN(b, 1);
-    int b2 = bitN(b, 2);
-    int b3 = bitN(b, 3);
-    int b4 = bitN(b, 4);
-    int b5 = bitN(b, 5);
-    int b6 = bitN(b, 6);
-    int b7 = bitN(b, 7);
-    
-    int b0p = (b0 ^ b4 ^ b5 ^ b6 ^ b7 ^ c0) << 0;
-    int b1p = (b1 ^ b5 ^ b6 ^ b7 ^ b0 ^ c1) << 1;
-    int b2p = (b2 ^ b6 ^ b7 ^ b0 ^ b1 ^ c2) << 2;
-    int b3p = (b3 ^ b7 ^ b0 ^ b1 ^ b2 ^ c3) << 3;
-    int b4p = (b4 ^ b0 ^ b1 ^ b2 ^ b3 ^ c4) << 4;
-    int b5p = (b5 ^ b1 ^ b2 ^ b3 ^ b4 ^ c5) << 5;
-    int b6p = (b6 ^ b2 ^ b3 ^ b4 ^ b5 ^ c6) << 6;
-    int b7p = (b7 ^ b3 ^ b4 ^ b5 ^ b6 ^ c7) << 7;
-    
-    int bp = b0p ^ b1p ^ b2p ^ b3p ^ b4p ^ b5p ^ b6p ^ b7p;
+    byte bp = b0p ^ b1p ^ b2p ^ b3p ^ b4p ^ b5p ^ b6p ^ b7p;
     return bp;
 }
 
-void subBytes(int state[4][4])
+void subBytes(byte state[4][4])
 {
     for (int c = 0; c < 4; c++)
     {
@@ -182,11 +185,11 @@ void subBytes(int state[4][4])
     }
 }
 
-void shiftRows(int state[4][4])
+void shiftRows(byte state[4][4])
 {
 	for (int r = 0; r < 4; r++)
 	{
-		int row[4] = { state[r][0], state[r][1], state[r][2], state[r][3]};
+		byte row[4] = { state[r][0], state[r][1], state[r][2], state[r][3]};
 		for (int c = 0; c < 4; c++)
 		{
 			state[r][c] = row[(c + r)%4];
@@ -194,22 +197,22 @@ void shiftRows(int state[4][4])
 	}
 }
 
-void mixColumns(int state[4][4])
+void mixColumns(byte state[4][4])
 {
 	for (int c = 0; c < 4; c++)
 	{
-		int s0 = state[0][c];
-		int s1 = state[1][c];
-		int s2 = state[2][c];
-		int s3 = state[3][c];
+		byte s0 = state[0][c];
+		byte s1 = state[1][c];
+		byte s2 = state[2][c];
+		byte s3 = state[3][c];
 		
-		int s0p = GFMultiplication(0x02, s0) ^ GFMultiplication(0x03, s1) ^ s2 ^ s3;
+		byte s0p = GFMultiplication(0x02, s0) ^ GFMultiplication(0x03, s1) ^ s2 ^ s3;
 		
-		int s1p = s0 ^ GFMultiplication(0x02, s1) ^ GFMultiplication(0x03, s2) ^ s3;
+		byte s1p = s0 ^ GFMultiplication(0x02, s1) ^ GFMultiplication(0x03, s2) ^ s3;
 				https://www.onlinegdb.com/online_c_compiler#_editor_1040591611
-		int s2p = s0 ^ s1 ^ GFMultiplication(0x02, s2) ^ GFMultiplication(0x03, s3);
+		byte s2p = s0 ^ s1 ^ GFMultiplication(0x02, s2) ^ GFMultiplication(0x03, s3);
 				
-		int s3p = GFMultiplication(0x03, s0) ^ s1 ^ s2 ^ GFMultiplication(0x02, s3);
+		byte s3p = GFMultiplication(0x03, s0) ^ s1 ^ s2 ^ GFMultiplication(0x02, s3);
 				
 		state[0][c] = s0p;
 		state[1][c] = s1p;
@@ -218,7 +221,7 @@ void mixColumns(int state[4][4])
 	}
 }
 
-void assignWord(unsigned char temp[4], unsigned char word[4])
+void assignWord(byte temp[4], byte word[4])
 {
     for (int j = 0; j < 4; j++)
     {
@@ -226,12 +229,12 @@ void assignWord(unsigned char temp[4], unsigned char word[4])
     }
 }
 
-void rotWord(unsigned char temp[4])
+void rotWord(byte temp[4])
 {
-    unsigned char t0 = temp[0];
-    unsigned char t1 = temp[1];
-    unsigned char t2 = temp[2];
-    unsigned char t3 = temp[3];
+    byte t0 = temp[0];
+    byte t1 = temp[1];
+    byte t2 = temp[2];
+    byte t3 = temp[3];
     
     temp[0] = t1;
     temp[1] = t2;
@@ -239,27 +242,27 @@ void rotWord(unsigned char temp[4])
     temp[3] = t0;
 }
 
-void subWord(unsigned char temp[4])
+void subWord(byte temp[4])
 {
     for (int j = 0; j < 4; j++)
     {
-        unsigned char t = temp[j];
-        unsigned char s = subByte(t);
+        byte t = temp[j];
+        byte s = subByte(t);
         temp[j] = s;
     }
 }
 
-unsigned char rcon(int i)
+byte rcon(int i)
 {
     return divisionAlgorithmRest(1<<(i-1), 283);
 }
 
-void xorRcon(unsigned char temp[4], int rcon)
+void xorRcon(byte temp[4], byte rcon)
 {
     temp[0] = temp[0] ^ rcon;
 }
 
-void xorWord(unsigned char temp[4], unsigned char word[4])
+void xorWord(byte temp[4], byte word[4])
 {
     for (int j = 0; j < 4; j++)
     {
@@ -267,9 +270,9 @@ void xorWord(unsigned char temp[4], unsigned char word[4])
     }
 }
 
-void keyExpansion(unsigned char key[16], unsigned char w[44][4])
+void keyExpansion(byte key[16], byte w[44][4])
 {
-    unsigned char temp[4];
+    byte temp[4];
 
     for (int i = 0; i < 4; i++)
     {
@@ -293,7 +296,7 @@ void keyExpansion(unsigned char key[16], unsigned char w[44][4])
     }
 }
 
-void addRoundKey(int state[4][4], unsigned char word[44][4], int round)
+void addRoundKey(byte state[4][4], byte word[44][4], int round)
 {
 	for (int r = 0; r < 4; r++)
 	{
